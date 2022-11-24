@@ -8,15 +8,15 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private Connection connection = Util.getConnection();
+    private Connection connection = (Connection) Util.getSession();
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
         try (Statement stat = connection.createStatement()) {
             stat.executeUpdate("CREATE TABLE IF NOT EXISTS users(" +
-                        "ID BIGINT NOT NULL AUTO_INCREMENT, NAME VARCHAR(100), " +
-                        "LASTNAME VARCHAR(100), AGE INT, PRIMARY KEY (ID) )");
+                        "ID BIGINT NOT NULL AUTO_INCREMENT, NAME VARCHAR(30), " +
+                        "LASTNAME VARCHAR(30), AGE INT, PRIMARY KEY (ID) )");
         } catch (SQLException e) {
                e.printStackTrace();
            }
@@ -47,7 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
         try (PreparedStatement preStat = connection.prepareStatement(
-                "DELETE FROM users WHERE ID=?")) {
+                "DELETE FROM users WHERE ID")) {
 
             preStat.setLong(1, id);
             preStat.executeUpdate();
